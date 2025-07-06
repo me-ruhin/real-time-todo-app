@@ -1,0 +1,39 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5001:5000"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/todos
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - mongo
+      - redis
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - nginx
+  mongo:
+    image: mongo:6
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongo-data:/data/db
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+volumes:
+  mongo-data: 
