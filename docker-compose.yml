@@ -1,8 +1,9 @@
 services:
   backend:
     build: ./backend
-    ports:
-      - "5001:5000"
+    # For development: use dynamic port mapping
+    # ports:
+    #   - "5001-5010:5000"  # Maps to random ports between 5001-5010
     environment:
       - MONGO_URL=mongodb://mongo:27017/todos
       - REDIS_URL=redis://redis:6379
